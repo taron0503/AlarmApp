@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AlarmApp</string>
+    <string name="timerSnoozingText">Snoozing until</string>
+</resources>
