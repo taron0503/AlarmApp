@@ -27,26 +27,21 @@ import com.example.alarmapp.databinding.ActivityAddAndEditAlarmBinding;
 import com.example.alarmapp.models.AddAndEditAlarmViewModel;
 
 public class AddAndEditAlarmActivity extends AppCompatActivity {
+
     private int RINGTONE_PICKER_REQUEST_CODE = 5;
     private AddAndEditAlarmViewModel model;
     ActivityAddAndEditAlarmBinding binding;
-
-    private TimePicker alarmTimePicker;
-    private Button alarmSaveButton;
-    private Button alarmCancelButton;
-    private NumberPicker secondsNumberPicker;
-    private LinearLayout alarmSoundLayout;
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_and_edit_alarm);
-//        AddAndEditAlarmActivityClickHandlers addAndEditAlarmActivityClickHandlers = new AddAndEditAlarmActivityClickHandlers();
-//        binding.setClickHandlers(addAndEditAlarmActivityClickHandlers);
+        AddAndEditAlarmActivityClickHandlers addAndEditAlarmActivityClickHandlers = new AddAndEditAlarmActivityClickHandlers();
+        binding.setClickHandlers(addAndEditAlarmActivityClickHandlers);
+
         init();
-        setClickHandlers();
+       // setClickHandlers();
         setObservers();
         configureSeconds();
     }
@@ -65,13 +60,7 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
         model.setUpdateModeOn(updateMode);
         model.setAlarm(alarmId);
 
-        alarmSaveButton = findViewById(R.id.alarmSaveButton);
-        alarmCancelButton = findViewById(R.id.alarmCancelButton);
-        secondsNumberPicker = findViewById(R.id.numberPicker);
-        alarmTimePicker = findViewById(R.id.alarmTimePicker);
-        alarmSoundLayout = findViewById(R.id.alarmSoundLayout);
-
-        alarmTimePicker.setIs24HourView(true);
+        binding.alarmTimePicker.setIs24HourView(true);
 
     }
 
@@ -85,30 +74,6 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
                 model.setSound(uri.toString());
             }
         }
-    }
-
-    private void setClickHandlers() {
-        alarmSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.onSave();
-                finish();
-            }
-        });
-
-        alarmCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
-        alarmSoundLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
-            startActivityForResult(intent, RINGTONE_PICKER_REQUEST_CODE);
-        });
     }
 
     private void setObservers() {
@@ -157,9 +122,9 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
 
 
     private void configureSeconds(){
-        secondsNumberPicker.setMinValue(0);
-        secondsNumberPicker.setMaxValue(59);
-        secondsNumberPicker.setFormatter(new NumberPicker.Formatter() {
+        binding.secondsNumberPicker.setMinValue(0);
+        binding.secondsNumberPicker.setMaxValue(59);
+        binding.secondsNumberPicker.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int value) {
                 return value<10?"0"+value:""+value;
@@ -167,16 +132,22 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
         });
     }
 
-//    public class AddAndEditAlarmActivityClickHandlers{
-//        public void onSave(View view){
-//            model.onSave();
-//            finish();
-//        }
-//
-//        public void onCancel(View view){
-//            setResult(RESULT_CANCELED);
-//            finish();
-//        }
-//    }
+    public class AddAndEditAlarmActivityClickHandlers{
+        public void onSaveButtonClicked(View view){
+            model.onSave();
+            finish();
+        }
+
+        public void onCancelButtonClicked(View view){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+
+        public void onSoundLayoutClicked(View view){
+            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+            startActivityForResult(intent, RINGTONE_PICKER_REQUEST_CODE);
+        }
+    }
 
 }

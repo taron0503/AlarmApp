@@ -10,6 +10,10 @@
             name="viewModel"
             type="com.example.alarmapp.models.AddAndEditAlarmViewModel" />
 
+        <variable
+            name="clickHandlers"
+            type="com.example.alarmapp.activities.AddAndEditAlarmActivity.AddAndEditAlarmActivityClickHandlers" />
+
 
     </data>
     <LinearLayout
@@ -44,7 +48,7 @@
                 android:textSize="50sp"/>
 
             <NumberPicker
-                android:id="@+id/numberPicker"
+                android:id="@+id/secondsNumberPicker"
                 android:theme="@style/NumberPickerStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,7 +121,8 @@
                 android:orientation="horizontal"
                 android:padding="5dp"
                 android:gravity="center_vertical"
-                android:background="@drawable/alarm_settings_item_background">
+                android:background="@drawable/alarm_settings_item_background"
+                android:onClick="@{clickHandlers::onSoundLayoutClicked}">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -155,14 +160,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="Save"/>
+                android:text="Save"
+                android:onClick="@{clickHandlers::onSaveButtonClicked}"/>
 
             <Button
                 android:id="@+id/alarmCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="Cancel"/>
+                android:text="Cancel"
+                android:onClick="@{clickHandlers::onCancelButtonClicked}"/>
 
         </LinearLayout>
 
