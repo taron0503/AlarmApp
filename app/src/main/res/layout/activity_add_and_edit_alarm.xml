@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.alarmapp.models.AddAndEditAlarmViewModel" />
+            name="alarm"
+            type="com.example.alarmapp.Alarm" />
 
         <variable
             name="clickHandlers"
@@ -37,8 +37,8 @@
                 android:layout_gravity="center"
                 android:theme="@style/NumberPickerStyle"
                 android:timePickerMode="spinner"
-                android:hour="@={viewModel.mutableAlarm.hour}"
-                android:minute="@={viewModel.mutableAlarm.minute}"
+                android:hour="@={alarm.hour}"
+                android:minute="@={alarm.minute}"
                 ></TimePicker>
 
             <TextView
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:width="100dp"
-                android:value="@={viewModel.mutableAlarm.seconds}"
+                android:value="@={alarm.seconds}"
                 />
 
         </LinearLayout>
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="9"
                     android:textColor="@color/colorPrimaryDark"
-                    android:text="@{viewModel.mutableAlarm.getTimeInFormat(`EEE, MMM dd`)}"/>
+                    android:text="@{alarm.getTimeInFormat(`EEE, MMM dd`)}"/>
 
                 <Button
                     android:id="@+id/datePickerButton"
@@ -91,7 +91,7 @@
                     android:layout_weight="1"
                     android:gravity="end"
                     android:background="@drawable/ic_baseline_date_range_24"
-                    android:onClick="@{()->viewModel.setShowDatePickerDialog(true)}"/>
+                    android:onClick="@{(view)->clickHandlers.onDatePickerClicked(view,true)}"/>
             </LinearLayout>
 
             <LinearLayout
@@ -109,7 +109,7 @@
                     android:background="@color/transparent"
                     android:hint="Alarm Name"
                     android:maxLength="20"
-                    android:text="@={viewModel.mutableAlarm.name}"
+                    android:text="@={alarm.name}"
                     android:inputType="text"/>
             </LinearLayout>
 
@@ -140,7 +140,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="music"
-                        app:soundTitle="@{viewModel.mutableAlarm.sound}"
+                        app:soundTitle="@{alarm.sound}"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>

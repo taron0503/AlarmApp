@@ -80,7 +80,7 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
         model.getMutableAlarm().observe(this, new Observer<Alarm>() {
             @Override
             public void onChanged(Alarm alarm) {
-                binding.setViewModel(model);
+                binding.setAlarm(alarm);
             }
         });
 
@@ -113,7 +113,7 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
         datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                model.setUpdateModeOn(false);
+                model.setShowDatePickerDialog(false);
             }
         });
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -147,6 +147,10 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
             Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
             startActivityForResult(intent, RINGTONE_PICKER_REQUEST_CODE);
+        }
+
+        public void onDatePickerClicked(View view, Boolean show){
+            model.setShowDatePickerDialog(show);
         }
     }
 
