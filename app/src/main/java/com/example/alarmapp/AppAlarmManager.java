@@ -15,12 +15,12 @@ public class AppAlarmManager {
     private static AlarmRepository alarmRepository;
     static Context context;
 
-    public static void startAlarm(Context context, Intent intent) {
+    public static void startAlarm(Context context, int alarmId) {
         AppAlarmManager.context = context;
         alarmRepository = AlarmRepository.createInstance(context);
         Intent alarmServiceIntent = new Intent(context,AlarmService.class);
 
-        int alarmId = intent.getIntExtra("alarmId", 0);
+        //int alarmId = alarmId.getIntExtra("alarmId", 0);
         alarmServiceIntent.putExtra("alarmId",alarmId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -29,17 +29,17 @@ public class AppAlarmManager {
             context.startService(alarmServiceIntent);
         }
 
-        initAutoSnoozeTimer(intent);
+        initAutoSnoozeTimer(alarmId);
         autoSnoozeTimer.start();
 
     }
 
-    public static void dismissAlarm(Intent intent) {
+    public static void dismissAlarm(int alarmId) {
         autoSnoozeTimer.cancel();
         Intent stopAlarmServiceIntent = new Intent(context,AlarmService.class);
         context.stopService(stopAlarmServiceIntent);
 
-        int alarmId = intent.getIntExtra("alarmId", 0);
+       // int alarmId = intent.getIntExtra("alarmId", 0);
 
         alarmRepository.getAlarmById(alarmId)
                 .subscribe(
@@ -55,13 +55,13 @@ public class AppAlarmManager {
 
 
 
-    public static void snoozeAlarm(Intent intent) {
+    public static void snoozeAlarm(int alarmId) {
         autoSnoozeTimer.cancel();
         finishSignalAlarmActivity();
         Intent stopAlarmServiceIntent = new Intent(context,AlarmService.class);
         context.stopService(stopAlarmServiceIntent);
 
-        int alarmId = intent.getIntExtra("alarmId", 0);
+        //int alarmId = intent.getIntExtra("alarmId", 0);
 
 
         alarmRepository.getAlarmById(alarmId)
@@ -72,7 +72,7 @@ public class AppAlarmManager {
                         alarmRepository.updateAlarm(alarm);
                         AlarmsPendingIntentManager.setAlarmPendingIntent(context, alarm);
                     } else  {
-                        dismissAlarm(intent);
+                        dismissAlarm(alarmId);
                     }
                 });
     }
@@ -83,7 +83,7 @@ public class AppAlarmManager {
         context.sendBroadcast(signal_intent);
     }
 
-    private static void initAutoSnoozeTimer(Intent intent){
+    private static void initAutoSnoozeTimer(int alarmId){
         autoSnoozeTimer =  new CountDownTimer(10000,1000) {
             @Override
             public void onTick(long l) { }
@@ -91,7 +91,7 @@ public class AppAlarmManager {
             @Override
             public void onFinish() {
                // Log.d("autosnooze","autosnooze");
-                snoozeAlarm(intent);
+                snoozeAlarm(alarmId);
             }
         };
     }

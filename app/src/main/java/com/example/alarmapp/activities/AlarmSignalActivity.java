@@ -10,45 +10,44 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.example.alarmapp.AppAlarmManager;
 import com.example.alarmapp.R;
-import com.example.alarmapp.UI.DismissButtonView;
+import com.example.alarmapp.databinding.ActivityAlarmSignalBinding;
+import com.example.alarmapp.ui.DismissButtonView;
 import com.example.alarmapp.models.AlarmSignalActivityViewModel;
 
 public class AlarmSignalActivity extends AppCompatActivity {
-    AlarmSignalActivityViewModel model;
-    int alarmId;
-    BroadcastReceiver broadcastReceiver;
-    TextView alarmTimeTextView;
-    Button snoozeButton;
-    DismissButtonView dismissButtonView;
+    private AlarmSignalActivityViewModel model;
+    private int alarmId;
+    private BroadcastReceiver broadcastReceiver;
+    private ActivityAlarmSignalBinding binding;
 
     public final static String BROADCAST_ACTION = "com.example.clockApp.AlarmSignalActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_signal);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_signal);
+//        setContentView(R.layout.activity_alarm_signal);
         addFlags();
         init();
+        setBroadcastReceiver();
         setDatas();
 
-        IntentFilter intentFilter = new IntentFilter(BROADCAST_ACTION);
-        intentFilter.addAction(BROADCAST_ACTION);
-        registerReceiver(broadcastReceiver,intentFilter);
 
-
-        snoozeButton.setOnClickListener(view -> {
+        binding.snoozeButton.setOnClickListener(view -> {
             snoozeAlarm();
         });
 
 
-        dismissButtonView.setOnSwipeListener(() -> {
+        binding.dismissButton.setOnSwipeListener(() -> {
             dismissAlarm();
         });
 
     }
+
 
     @Override
     protected void onStop() {
@@ -60,45 +59,51 @@ public class AlarmSignalActivity extends AppCompatActivity {
     private void init(){
         Intent intent = getIntent();
         alarmId = intent.getIntExtra("alarmId",0);
-        snoozeButton = findViewById(R.id.snoozeButton);
-        dismissButtonView = findViewById(R.id.dismissButton);
-        alarmTimeTextView = findViewById(R.id.alarmTimeTextView);
         model = new AlarmSignalActivityViewModel(getApplication());
+    }
+
+    private void setBroadcastReceiver(){
+        IntentFilter intentFilter = new IntentFilter(BROADCAST_ACTION);
+        intentFilter.addAction(BROADCAST_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 AlarmSignalActivity.this.finish();
             }
         };
+        registerReceiver(broadcastReceiver,intentFilter);
     }
 
     private void setDatas(){
         model.getAlarmById(alarmId)
                 .subscribe(alarm -> {
-                    alarmTimeTextView.setText(alarm.getTimeInFormat());
+                    binding.alarmTimeTextView.setText(alarm.getTimeInFormat());
                 });
     }
 
     private void dismissAlarm(){
-        AppAlarmManager.dismissAlarm(getIntent());
+        AppAlarmManager.dismissAlarm(alarmId);
         finish();
     }
 
     private void snoozeAlarm(){
-        AppAlarmManager.snoozeAlarm(getIntent());
+        AppAlarmManager.snoozeAlarm(alarmId);
         finish();
     }
 
     private void addFlags(){
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON| WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN |
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
                         WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
+//                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+//                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+//                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN |
+//                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+//                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+//                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
 }

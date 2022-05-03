@@ -16,16 +16,17 @@ public class AlarmBroadcastReciver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        int alarmId = intent.getIntExtra("alarmId",0);
 
         switch (action) {
             case "dismissAlarm":
-                AppAlarmManager.dismissAlarm(intent);
+                AppAlarmManager.dismissAlarm(alarmId);
                 break;
             case "snoozeAlarm":
-                AppAlarmManager.snoozeAlarm(intent);
+                AppAlarmManager.snoozeAlarm(alarmId);
                 break;
             case "startAlarm":
-                AppAlarmManager.startAlarm(context,intent);
+                AppAlarmManager.startAlarm(context,alarmId);
                 break;
         }
     }

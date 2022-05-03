@@ -1,4 +1,4 @@
-package com.example.alarmapp.UI;
+package com.example.alarmapp.ui;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -219,5 +219,6 @@ public class DismissButtonView extends View {
 //
 //        setMeasuredDimension(width, height);
 //    }
+
 }
 
