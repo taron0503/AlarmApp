@@ -20,7 +20,6 @@ public class AppAlarmManager {
         alarmRepository = AlarmRepository.createInstance(context);
         Intent alarmServiceIntent = new Intent(context,AlarmService.class);
 
-        //int alarmId = alarmId.getIntExtra("alarmId", 0);
         alarmServiceIntent.putExtra("alarmId",alarmId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -38,8 +37,6 @@ public class AppAlarmManager {
         autoSnoozeTimer.cancel();
         Intent stopAlarmServiceIntent = new Intent(context,AlarmService.class);
         context.stopService(stopAlarmServiceIntent);
-
-       // int alarmId = intent.getIntExtra("alarmId", 0);
 
         alarmRepository.getAlarmById(alarmId)
                 .subscribe(
@@ -60,8 +57,6 @@ public class AppAlarmManager {
         finishSignalAlarmActivity();
         Intent stopAlarmServiceIntent = new Intent(context,AlarmService.class);
         context.stopService(stopAlarmServiceIntent);
-
-        //int alarmId = intent.getIntExtra("alarmId", 0);
 
 
         alarmRepository.getAlarmById(alarmId)
