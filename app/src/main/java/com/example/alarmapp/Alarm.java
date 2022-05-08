@@ -18,9 +18,6 @@ public class Alarm extends BaseObservable{
     private String name = "";
     @Ignore
     Calendar calendar = Calendar.getInstance();
-    //    private int hour;
-//    private int minutes;
-//    private int seconds;
     private int pendingIntentRequestCode;
     private int snoozeTime = 20;
     private int snoozeCount = 0;
@@ -32,10 +29,8 @@ public class Alarm extends BaseObservable{
 
 
     public Alarm(long time) {
-        this.time = time;
+        setTime(time);
         this.pendingIntentRequestCode = (int) (time/1000);
-//        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        this.setSound(uri.toString());
     }
 
     public String getTimeInFormat(){
@@ -141,6 +136,8 @@ public class Alarm extends BaseObservable{
     }
 
     public void setTime(long time) {
+//        if(time<System.currentTimeMillis())
+//            time = System.currentTimeMillis() + 86400000; // add 1 day
         this.time = time;
         notifyPropertyChanged(BR.time);
     }
@@ -148,8 +145,7 @@ public class Alarm extends BaseObservable{
     private void setTime(int type, int time){
         calendar.setTimeInMillis(this.time);
         calendar.set(type,time);
-        this.time = calendar.getTimeInMillis();
-        notifyPropertyChanged(BR.time);
+        setTime(calendar.getTimeInMillis());
     }
 
     @Bindable

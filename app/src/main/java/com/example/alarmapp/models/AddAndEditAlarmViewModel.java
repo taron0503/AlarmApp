@@ -45,7 +45,7 @@ public class AddAndEditAlarmViewModel extends AndroidViewModel {
     public void updateAlarm(){
         Alarm alarm = mutableAlarm.getValue();
         alarm.cancelSnooze();
-        //AlarmsPendingIntentManager.setAlarmPendingIntent(getApplication(), alarm);
+        AlarmsPendingIntentManager.setAlarmPendingIntent(getApplication(), alarm);
         alarmRepository.updateAlarm(alarm);
     }
 
@@ -60,7 +60,7 @@ public class AddAndEditAlarmViewModel extends AndroidViewModel {
             });
         }else{
             Alarm newAlarm = new Alarm(System.currentTimeMillis());
-            Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             newAlarm.setSound(uri.toString());
             mutableAlarm.setValue(newAlarm);
         }

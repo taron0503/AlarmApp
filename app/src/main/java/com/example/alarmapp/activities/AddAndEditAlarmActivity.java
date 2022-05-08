@@ -41,7 +41,6 @@ public class AddAndEditAlarmActivity extends AppCompatActivity {
         binding.setClickHandlers(addAndEditAlarmActivityClickHandlers);
 
         init();
-       // setClickHandlers();
         setObservers();
         configureSeconds();
     }

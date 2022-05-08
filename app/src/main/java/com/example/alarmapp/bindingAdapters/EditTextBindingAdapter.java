@@ -8,9 +8,11 @@ import androidx.databinding.BindingAdapter;
 public class EditTextBindingAdapter {
     @BindingAdapter({"app:soundTitle"})
     public static void soundTitle(TextView textView, String soundPath) {
-        Uri soundUri = Uri.parse(soundPath);
-        String title = soundUri.getQueryParameter("title");
-        textView.setText(title != null?title:"Default Sound");
+        if(soundPath != null) {
+            Uri soundUri = Uri.parse(soundPath);
+            String title = soundUri.getQueryParameter("title");
+            textView.setText(title != null ? title : "Default Sound");
+        }
 
     }
 }
