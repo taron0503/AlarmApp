@@ -136,8 +136,8 @@ public class Alarm extends BaseObservable{
     }
 
     public void setTime(long time) {
-//        if(time<System.currentTimeMillis())
-//            time = System.currentTimeMillis() + 86400000; // add 1 day
+        if(time<=System.currentTimeMillis())
+            time = System.currentTimeMillis() + 86400000; // add 1 day
         this.time = time;
         notifyPropertyChanged(BR.time);
     }
